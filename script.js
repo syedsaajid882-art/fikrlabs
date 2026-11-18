@@ -1,7 +1,5 @@
-// FikrLabs site script
+// FikarLabs site script
 (function () {
-  // Contact form submits via mailto to this address.
-  var CONTACT_EMAIL = 'syedsaajid882@gmail.com';
 
   var nav = document.querySelector('.nav');
   var toggle = document.querySelector('.nav__toggle');
@@ -38,9 +36,17 @@
     items.forEach(function (el) { el.classList.add('visible'); });
   }
 
-  // Contact form -> mailto
+  // Contact form -> FormSubmit (sends to our inbox, no mail app needed)
+  var CONTACT_EMAIL = 'ahmadshamir77@gmail.com';
+  var FORM_ENDPOINT = 'https://formsubmit.co/ajax/' + CONTACT_EMAIL;
   var form = document.getElementById('contact-form');
   var status = form.querySelector('.form__status');
+  var btn = form.querySelector('button[type="submit"]');
+  var label = btn.querySelector('.btn__label');
+  function setStatus(msg, type) {
+    status.innerHTML = msg;
+    status.className = 'form__status' + (type ? ' ' + type : '');
+  }
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var ok = true;
@@ -51,18 +57,38 @@
       f.setAttribute('aria-invalid', String(!valid));
       if (!valid) ok = false;
     });
-    if (!ok) {
-      status.textContent = 'Please fill in your name, a valid email and project details.';
-      status.classList.add('error');
-      return;
-    }
+    if (!ok) { setStatus('Please fill in your name, a valid email and project details.', 'error'); return; }
     var d = form.elements;
-    var subject = 'Project enquiry: ' + d.service.value + ' (from ' + d.name.value.trim() + ')';
-    var body = 'Name: ' + d.name.value.trim() + '\nEmail: ' + d.email.value.trim() +
-      '\nService: ' + d.service.value + '\n\n' + d.message.value.trim();
-    window.location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    status.classList.remove('error');
-    status.textContent = 'Opening your email app… If nothing happens, email us at ' + CONTACT_EMAIL + '.';
+    var payload = {
+      name: d.name.value.trim(),
+      email: d.email.value.trim(),
+      phone: d.phone.value.trim(),
+      service: d.service.value,
+      message: d.message.value.trim(),
+      _subject: 'New enquiry from fikarlabs.in',
+      _template: 'table',
+      _captcha: 'false',
+      _replyto: d.email.value.trim(),
+      _honey: d._honey.value
+    };
+    btn.disabled = true; btn.classList.add('is-loading'); label.textContent = 'Sending…';
+    setStatus('', '');
+    fetch(FORM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        if (!r.ok || String(data.success) !== 'true') throw new Error(data.message || 'Request failed');
+      });
+    }).then(function () {
+      form.reset();
+      setStatus('Thank you! Your message has been sent. We’ll get back to you soon.', 'success');
+    }).catch(function () {
+      setStatus('Sorry, your message could not be sent. Please try again, or email us at <a href="mailto:' + CONTACT_EMAIL + '">' + CONTACT_EMAIL + '</a>.', 'error');
+    }).then(function () {
+      btn.disabled = false; btn.classList.remove('is-loading'); label.textContent = 'Send message';
+    });
   });
 })();
 

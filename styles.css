@@ -206,3 +206,14 @@ p{margin:0 0 1em}
 .gallery__item--wide{width:auto;aspect-ratio:1100/803}
 @media (min-width:900px){.product--reverse{grid-template-columns:1.2fr minmax(300px,.8fr)}}
 .product__body,.product__media{min-width:0}
+
+/* Form states */
+.form__hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
+.form{position:relative}
+.form__opt{font-weight:400;color:var(--muted)}
+.form__status.success{color:#6ee7b7}
+.form__status a{color:inherit;text-decoration:underline}
+.btn.is-loading{opacity:.8;cursor:progress}
+.btn.is-loading::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .8s linear infinite}
+.btn:disabled{transform:none}
+@keyframes spin{to{transform:rotate(360deg)}}

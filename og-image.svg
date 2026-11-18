@@ -8,6 +8,6 @@
     <rect width="64" height="64" rx="16" fill="url(#g)"/>
     <g fill="#fff"><rect x="17" y="14" width="10" height="36" rx="5"/><rect x="17" y="14" width="31" height="10" rx="5"/><rect x="17" y="29" width="17" height="9" rx="4.5"/><circle cx="43" cy="33.5" r="5"/></g>
   </g>
-  <text x="290" y="290" font-family="Space Grotesk, Inter, Arial, sans-serif" font-size="104" font-weight="700" fill="#fff">Fikr<tspan fill="url(#g)">Labs</tspan></text>
+  <text x="290" y="290" font-family="Space Grotesk, Inter, Arial, sans-serif" font-size="104" font-weight="700" fill="#fff">Fikar<tspan fill="url(#g)">Labs</tspan></text>
   <text x="294" y="360" font-family="Inter, Arial, sans-serif" font-size="36" fill="#aab3cf">Ideas engineered into software · Ongole, AP</text>
 </svg>
